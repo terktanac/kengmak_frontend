@@ -88,7 +88,6 @@ export default function Home() {
           <Typography variant="h6" className={classes.title}>
             fakebook
           </Typography>
-          <Button color="inherit">Login</Button>
           <Avatar aria-label="user" className={classes.avatar}>
             {username.charAt(0).toUpperCase()}
           </Avatar>
