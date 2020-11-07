@@ -42,10 +42,16 @@ export default function Home() {
   const [posts, setPosts] = useState([]);
   const [isAdmin, setIsAdmin] = useState(false);
   const [username, setUsername] = useState("");
+  const [newPost, setNewPost] = useState("");
+
+  const handleNewPostChanged = (e) => {
+    setNewPost(e.target.value);
+  };
 
   const handlePost = () => {
     //send post API
-    console.log("post");
+    console.log("post " + newPost);
+    setNewPost("");
   };
 
   useEffect(() => {
@@ -99,7 +105,14 @@ export default function Home() {
             title={username}
           />
           <CardContent>
-            <TextField fullWidth variant="outlined" multiline rowsMax={4} />
+            <TextField
+              value={newPost}
+              onChange={handleNewPostChanged}
+              fullWidth
+              variant="outlined"
+              multiline
+              rowsMax={4}
+            />
             <Button
               onClick={handlePost}
               color="primary"

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import Card from "@material-ui/core/Card";
 import CardHeader from "@material-ui/core/CardHeader";
@@ -31,8 +31,9 @@ const useStyles = makeStyles((theme) => ({
 
 export default function Commemt(props) {
   const classes = useStyles();
-  const [openDelete, setOpenDelete] = React.useState(false);
-  const [openEdit, setOpenEdit] = React.useState(false);
+  const [openDelete, setOpenDelete] = useState(false);
+  const [openEdit, setOpenEdit] = useState(false);
+  const [editedComment, setEditedComment] = useState("");
 
   const handleOpenDelete = () => {
     setOpenDelete(true);
@@ -43,6 +44,7 @@ export default function Commemt(props) {
   };
 
   const handleOpenEdit = () => {
+    setEditedComment(props.content)
     setOpenEdit(true);
   };
 
@@ -50,9 +52,13 @@ export default function Commemt(props) {
     setOpenEdit(false);
   };
 
+  const handleEditedCommentChanged = (e) => {
+    setEditedComment(e.target.value);
+  };
+
   const handleEditComment = () => {
     //edit comment API
-    console.log("edit comment");
+    console.log("edit comment to " + editedComment);
     setOpenEdit(false);
   };
 
@@ -80,9 +86,6 @@ export default function Commemt(props) {
       <CardActions disableSpacing>
         <IconButton aria-label="add to favorites">
           <FavoriteIcon />
-        </IconButton>
-        <IconButton aria-label="comment">
-          <CommentIcon />
         </IconButton>
         {(props.isAdmin || props.username === props.owner) && (
           <span>
@@ -119,6 +122,8 @@ export default function Commemt(props) {
               <DialogTitle id="alert-dialog-title">Edit comment</DialogTitle>
               <DialogContent>
                 <TextField
+                value={editedComment}
+                onChange={handleEditedCommentChanged}
                   autoFocus
                   variant="outlined"
                   margin="dense"

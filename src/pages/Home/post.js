@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import clsx from "clsx";
 import Card from "@material-ui/core/Card";
@@ -51,9 +51,11 @@ const useStyles = makeStyles((theme) => ({
 
 export default function Post(props) {
   const classes = useStyles();
-  const [expanded, setExpanded] = React.useState(false);
-  const [openDelete, setOpenDelete] = React.useState(false);
-  const [openEdit, setOpenEdit] = React.useState(false);
+  const [expanded, setExpanded] = useState(false);
+  const [openDelete, setOpenDelete] = useState(false);
+  const [openEdit, setOpenEdit] = useState(false);
+  const [editedPost, setEditedPost] = useState("");
+  const [newComment, setNewComment] = useState("");
 
   const handleOpenDelete = () => {
     setOpenDelete(true);
@@ -64,6 +66,7 @@ export default function Post(props) {
   };
 
   const handleOpenEdit = () => {
+    setEditedPost(props.content);
     setOpenEdit(true);
   };
 
@@ -71,14 +74,23 @@ export default function Post(props) {
     setOpenEdit(false);
   };
 
+  const handleEditedPostChanged = (e) => {
+    setEditedPost(e.target.value);
+  };
+
+  const handleNewCommentChanged = (e) => {
+    setNewComment(e.target.value);
+  };
+
   const handleComment = () => {
     //send comment API
-    console.log("comment");
+    console.log("comment " + newComment);
+    setNewComment("")
   };
 
   const handleEditPost = () => {
     //edit post API
-    console.log("edit post");
+    console.log("edit post to " + editedPost);
     setOpenEdit(false);
   };
 
@@ -156,6 +168,8 @@ export default function Post(props) {
               <DialogTitle id="alert-dialog-title">Edit post</DialogTitle>
               <DialogContent>
                 <TextField
+                  value={editedPost}
+                  onChange={handleEditedPostChanged}
                   autoFocus
                   variant="outlined"
                   margin="dense"
@@ -189,7 +203,13 @@ export default function Post(props) {
               title={props.owner}
             />
             <CardContent>
-              <TextField fullWidth variant="outlined" multiline />
+              <TextField
+                value={newComment}
+                onChange={handleNewCommentChanged}
+                fullWidth
+                variant="outlined"
+                multiline
+              />
               <Button
                 onClick={handleComment}
                 color="primary"
