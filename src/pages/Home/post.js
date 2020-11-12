@@ -224,6 +224,7 @@ export default function Post(props) {
           {props.comments?.map((comment) => (
             <Comment
               id={comment.id}
+              postId={props.id}
               content={comment.content}
               owner={comment.owner}
               deleted_at={comment.deleted_at}

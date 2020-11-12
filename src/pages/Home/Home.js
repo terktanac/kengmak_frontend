@@ -126,6 +126,7 @@ export default function Home() {
         {posts.map((post) => (
           <Post
             owner={post.owner}
+            post={post.id}
             content={post.content}
             comments={post.comments}
             deleted_at={post.deleted_at}
