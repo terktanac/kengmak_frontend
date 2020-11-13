@@ -7,6 +7,7 @@ import MenuIcon from "@material-ui/icons/Menu";
 import Toolbar from "@material-ui/core/Toolbar";
 import TextField from "@material-ui/core/TextField";
 import Typography from "@material-ui/core/Typography";
+import axios from "axios";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -43,7 +44,15 @@ export default function Login() {
 
   const handleLogin = () => {
     //send login API
-    console.log(username +" "+ password);
+    axios
+      .post(`http://localhost:9000/login`, {
+        username: username,
+        password: password,
+      })
+      .then((res) => {
+        console.log(res);
+      });
+    console.log(username + " " + password);
     setUsername("");
     setPassword("");
   };
@@ -91,7 +100,6 @@ export default function Login() {
           </div>
         </Toolbar>
       </AppBar>
-      <div className={classes.login}>Content</div>
     </div>
   );
 }
