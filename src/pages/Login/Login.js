@@ -45,14 +45,22 @@ export default function Login() {
   const handleLogin = () => {
     //send login API
     axios
-      .post(`http://localhost:9000/login`, {
-        username: username,
-        password: password,
-      })
+      .post(
+        `http://localhost:4000/login`,
+        {
+          username: username,
+          password: password,
+        },
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+          withCredentials: true
+        }
+      )
       .then((res) => {
-        console.log(res);
+        console.log(res.data.token);
       });
-    console.log(username + " " + password);
     setUsername("");
     setPassword("");
   };
