@@ -21,6 +21,9 @@ import DialogActions from "@material-ui/core/DialogActions";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import DialogContent from "@material-ui/core/DialogContent";
 import TextField from "@material-ui/core/TextField";
+import axios from "axios";
+
+const BACKEND_URL = "http://localhost:4000"
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -82,21 +85,43 @@ export default function Post(props) {
     setNewComment(e.target.value);
   };
 
-  const handleComment = () => {
+  const handleComment = async () => {
     //send comment API
-    console.log("comment " + newComment);
+    try {
+      const response = await axios.post(BACKEND_URL+'/comment', { postId: props.post, content: newComment }, { 
+        headers: { Authorization: `Bearer ${props.token}` },
+      })
+      props.getPost()
+    } catch (error) {
+      console.log(error)
+    }
     setNewComment("")
   };
 
-  const handleEditPost = () => {
+  const handleEditPost = async() => {
     //edit post API
-    console.log("edit post to " + editedPost);
+    try {
+      const response = await axios.post(BACKEND_URL+'/post/edit', { postId: props.post, content: editedPost }, { 
+        headers: { Authorization: `Bearer ${props.token}` },
+      })
+      props.getPost()
+    } catch (error) {
+      console.log(error)
+    }
     setOpenEdit(false);
   };
 
-  const handleDeletePost = () => {
+  const handleDeletePost = async () => {
     //delete post API
-    console.log("delete post");
+    try {
+      const response = await axios.delete(BACKEND_URL+'/post', { 
+        headers: { Authorization: `Bearer ${props.token}` },
+        data: { postId: props.post },
+      })
+      props.getPost()
+    } catch (error) {
+      console.log(error)
+    }
     setOpenDelete(false);
   };
 
@@ -224,12 +249,14 @@ export default function Post(props) {
           {props.comments?.map((comment) => (
             <Comment
               id={comment.id}
-              postId={props.id}
+              postId={props.post}
               content={comment.content}
               owner={comment.owner}
               deleted_at={comment.deleted_at}
               isAdmin={props.isAdmin}
               username={props.username}
+              token={props.token}
+              getPost={props.getPost}
             />
           ))}
         </CardContent>

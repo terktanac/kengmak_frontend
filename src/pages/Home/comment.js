@@ -17,6 +17,9 @@ import DialogActions from "@material-ui/core/DialogActions";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import DialogContent from "@material-ui/core/DialogContent";
 import TextField from "@material-ui/core/TextField";
+import axios from "axios";
+
+const BACKEND_URL = "http://localhost:4000"
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -55,15 +58,30 @@ export default function Commemt(props) {
     setEditedComment(e.target.value);
   };
 
-  const handleEditComment = () => {
+  const handleEditComment = async() => {
     //edit comment API
-    console.log("edit comment to " + editedComment);
+    try {
+      const response = await axios.post(BACKEND_URL+'/comment/edit', { commentId: props.id, postId: props.postId, content: editedComment }, { 
+        headers: { Authorization: `Bearer ${props.token}` },
+      })
+      props.getPost()
+    } catch (error) {
+      console.log(error)
+    }
     setOpenEdit(false);
   };
 
-  const handleDeleteComment = () => {
+  const handleDeleteComment = async () => {
     //delete comment API
-    console.log("delete comment");
+    try {
+      const response = await axios.delete(BACKEND_URL+'/comment', { 
+        headers: { Authorization: `Bearer ${props.token}` },
+        data: { commentId: props.id, postId: props.postId },
+      })
+      props.getPost()
+    } catch (error) {
+      console.log(error)
+    }
     setOpenDelete(false);
   };
 

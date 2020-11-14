@@ -59,8 +59,9 @@ export default function Login() {
         }
       )
       .then((res) => {
+        const { username, role, token } = res.data
+        localStorage.setItem('kengmaktoken', JSON.stringify({username, role, token}))
         window.location.assign("/");
-        console.log(res.data.token);
       });
     setUsername("");
     setPassword("");

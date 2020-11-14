@@ -12,6 +12,9 @@ import MenuIcon from "@material-ui/icons/Menu";
 import Avatar from "@material-ui/core/Avatar";
 import TextField from "@material-ui/core/TextField";
 import Post from "./post";
+import axios from "axios";
+
+const BACKEND_URL = "http://localhost:4000"
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -42,35 +45,51 @@ export default function Home() {
   const [posts, setPosts] = useState([]);
   const [isAdmin, setIsAdmin] = useState(false);
   const [username, setUsername] = useState("");
+  const [token, setToken] = useState("");
   const [newPost, setNewPost] = useState("");
-
+  
   const handleNewPostChanged = (e) => {
     setNewPost(e.target.value);
   };
 
-  const handlePost = () => {
+
+  const handlePost = async () => {
     //send post API
-    console.log("post " + newPost);
+    try {
+      const response = await axios.post(BACKEND_URL+ '/post', 
+        { content: newPost },
+        { headers: { Authorization: `Bearer ${token}` } }
+      )
+    } catch (error){
+      console.log(error)
+    }
+    await getPost()
     setNewPost("");
   };
 
-  useEffect(() => {
-    setIsAdmin(false);
-    setUsername("terk");
-    setPosts([
-      {
-        id: 1,
-        owner: "terk",
-        deleted_at: null,
-        content: "hello",
-        comments: [
-          { id: 1, owner: "terk", deleted_at: null, content: "hi" },
-          {},
-        ],
-      },
-      {},
-      {},
-    ]);
+  const getPost = async (_token = token) => {
+    try {
+      const response = await axios.get(BACKEND_URL+ '/post', { headers: { Authorization: `Bearer ${_token}` } })
+      const re = response.data.reverse()
+      setPosts(re);
+    } catch (error){
+      console.log(error)
+    }
+  }
+  const handleLogout = () => {
+    // TODO insecure logout แล้ว แต่ Token ยังใช้ได้อยู่
+    localStorage.setItem('kengmaktoken', '')
+    window.location.assign("/login");
+  }
+
+  useEffect(async () => {
+    const data = localStorage.getItem('kengmaktoken')
+    if(!data) window.location.assign("/login");
+    const { username: _username, role: _role, token: _token } = JSON.parse(data)
+    await getPost(_token)
+    setIsAdmin(_role === "MODERATOR");
+    setUsername(_username);
+    setToken(_token);
   }, []);
 
   return (
@@ -91,6 +110,15 @@ export default function Home() {
           <Avatar aria-label="user" className={classes.avatar}>
             {username.charAt(0).toUpperCase()}
           </Avatar>
+          <Button
+            onClick={handleLogout}
+            color="primary"
+            autoFocus
+            style={{ marginTop: "0.5rem" }}
+            variant="contained"
+          >
+            Logout
+          </Button>
         </Toolbar>
       </AppBar>
       <div className={classes.newsfeed}>
@@ -126,12 +154,14 @@ export default function Home() {
         {posts.map((post) => (
           <Post
             owner={post.owner}
-            post={post.id}
+            post={post._id}
             content={post.content}
             comments={post.comments}
             deleted_at={post.deleted_at}
             isAdmin={isAdmin}
             username={username}
+            getPost={getPost}
+            token={token}
           />
         ))}
       </div>
