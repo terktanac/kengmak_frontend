@@ -59,6 +59,7 @@ export default function Login() {
         }
       )
       .then((res) => {
+        window.location.assign("/");
         console.log(res.data.token);
       });
     setUsername("");
