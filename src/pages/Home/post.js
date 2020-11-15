@@ -248,6 +248,7 @@ export default function Post(props) {
           </Card>
           {props.comments?.map((comment) => (
             <Comment
+              key={comment.id}
               id={comment.id}
               postId={props.post}
               content={comment.content}

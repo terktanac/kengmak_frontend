@@ -90,11 +90,11 @@ export default function Home() {
     window.location.assign("/login");
   }
 
-  useEffect(async () => {
+  useEffect(() => {
     const data = localStorage.getItem('kengmaktoken')
     if(!data) window.location.assign("/login");
     const { username: _username, role: _role, token: _token } = JSON.parse(data)
-    await getPost(_token)
+    getPost(_token)
     setIsAdmin(_role === "MODERATOR");
     setUsername(_username);
     setToken(_token);
@@ -161,6 +161,7 @@ export default function Home() {
         </Card>
         {posts.map((post) => (
           <Post
+            key={post._id}
             owner={post.owner}
             post={post._id}
             content={post.content}
