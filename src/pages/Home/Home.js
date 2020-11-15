@@ -73,11 +73,19 @@ export default function Home() {
       const re = response.data.reverse()
       setPosts(re);
     } catch (error){
-      console.log(error)
+      localStorage.setItem('kengmaktoken', '')
+      window.location.assign("/login");
     }
   }
-  const handleLogout = () => {
-    // TODO insecure logout แล้ว แต่ Token ยังใช้ได้อยู่
+  const handleLogout = async () => {
+    try {
+      const response = await axios.post(BACKEND_URL+ '/logout', 
+        {},
+        { headers: { Authorization: `Bearer ${token}` } }
+      )
+    } catch (error){
+      console.log(error)
+    }
     localStorage.setItem('kengmaktoken', '')
     window.location.assign("/login");
   }
