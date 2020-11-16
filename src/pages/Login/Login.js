@@ -46,7 +46,7 @@ export default function Login() {
     //send login API
     axios
       .post(
-        `http://localhost:4000/login`,
+        `https://localhost:4000/login`,
         {
           username: username,
           password: password,

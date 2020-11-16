@@ -14,7 +14,7 @@ import TextField from "@material-ui/core/TextField";
 import Post from "./post";
 import axios from "axios";
 
-const BACKEND_URL = "http://localhost:4000"
+const BACKEND_URL = "https://localhost:4000"
 
 const useStyles = makeStyles((theme) => ({
   root: {
