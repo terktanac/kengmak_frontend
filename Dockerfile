@@ -1,8 +1,8 @@
-FROM node:latest
+FROM node:10
 
 WORKDIR /kengmak_front
 ENV PATH /app/node_modules/.bin:$PATH
-COPY ./package.json ./
+COPY ./package*.json /kengmak_front/
 RUN npm install
 COPY . .
 EXPOSE 3000
