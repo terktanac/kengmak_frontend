@@ -120,9 +120,9 @@ export default function Home() {
           </Avatar>
           <Button
             onClick={handleLogout}
-            color="primary"
+            color="secondary"
             autoFocus
-            style={{ marginTop: "0.5rem" }}
+            style={{ marginLeft: "1rem" }}
             variant="contained"
           >
             Logout
